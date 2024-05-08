@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Azure_ManagedIdentity_demo_FunctionApp": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7293",
+      "launchBrowser": false
+    }
+  }
+}
