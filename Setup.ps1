@@ -2,11 +2,13 @@ $ErrorActionPreference = "Stop"
 Set-Location $PSScriptRoot
 Clear-Host
 
+# Input variables
 $resourceGroup = "MI-demo-rg"
 $location = "northeurope"
 $functionAppName = "mvrs-mi-demo2-func"
 $storageAccountName = "mvrsmidemo2sa"
 $managedIdentityName = "mvrs-mi-demo2-umi"
+
 
 Write-Host "Creating resource group..."
 az group create --name $resourceGroup --location $location --output none
@@ -40,11 +42,11 @@ az role assignment create --role "Storage Blob Data Contributor" --assignee $umi
 Write-HOst "Update settings local..."
 $localSettings = Get-Content 'local.settings.json' -raw | ConvertFrom-Json
 $localSettings.Values.MI_test_storage_account_name = $sa.name
-$localSettings.Values.MI_test_user_assigned_identity_id = $umi.principalId
+$localSettings.Values.MI_test_user_assigned_identity_id = $umi.clientId
 $localSettings | ConvertTo-Json -depth 32| set-content 'local.settings.json'
 
 Write-HOst "Update settings in function app..."
-az functionapp config appsettings set --resource-group $resourceGroup --name $functionAppName --settings MI_test_storage_account_name=$($sa.name) MI_test_user_assigned_identity_id=$($umi.principalId) --output none
+az functionapp config appsettings set --resource-group $resourceGroup --name $functionAppName --settings MI_test_storage_account_name=$($sa.name) MI_test_user_assigned_identity_id=$($umi.clientId) --output none
 
 Write-HOst "Publishing function app..."
 func azure functionapp publish $functionAppName

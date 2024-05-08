@@ -35,7 +35,7 @@ namespace Azure_ManagedIdentity_demo_FunctionApp
             {
                 var containers = await GetContainers(cred);
 
-                responseMessage.Add("Fetched containers:\r\n" + string.Join("\r\n- ", containers));
+                responseMessage.Add("Fetched containers:\r\n" + string.Join("\r\n", containers.Select(container => $"- {container}")));
             }
             catch (Exception ex)
             {

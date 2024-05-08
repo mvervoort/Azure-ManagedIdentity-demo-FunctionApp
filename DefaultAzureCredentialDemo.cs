@@ -19,7 +19,7 @@ namespace Azure_ManagedIdentity_demo_FunctionApp
         {
             _logger.LogInformation("*** DefaultAzureCredential demo ***");
 
-            var cred = new DefaultAzureCredential();
+            var cred = new DefaultAzureCredential(new DefaultAzureCredentialOptions { ExcludeVisualStudioCredential = true });
                 
             return await GetDetailsAndFormatResponse(cred);
         }

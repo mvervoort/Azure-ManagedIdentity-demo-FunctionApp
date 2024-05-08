@@ -1,6 +1,6 @@
 # Azure ManagedIdentity demo using a Azure Functions
 
-This is a simple demo to show how to use Azure ManagedIdentity in a Azure Function to access an Azure Storage Account.
+This is a simple demo to show how to use Azure ManagedIdentity in an Azure Function to access an Azure Storage Account.
 
 It will show the use of:
 
@@ -9,52 +9,37 @@ It will show the use of:
 - ChainedTokenCredential
 - AzureCliCredential
 
+## Solution design
+
+![docs\Solution-design.drawio.png](docs\Solution-design.drawio.png)
+
 ## Prerequisites
 
 - Azure Subscription
-- Azure CLI
-- Azure Functions Core Tools
-- Azure Storage Account
-- Azure Function App
-- Azure Managed Identity
+- Azure CLI installed
+- Azure Functions Core Tools installed
+- Azurite storage emulator installed
 
 ## Setup
 
-1. Create a new Azure Function App
-```pwsh
-az functionapp create --resource-group <resource-group> --name <function-app-name> --consumption-plan-location <location> --runtime dotnet --functions-version 4
-```
-2. Create a new Azure Storage Account
-```pwsh
-az storage account create --name <storage-account-name> --resource-group <resource-group> --location <location> --sku Standard_LRS
-```
-3. Create a new Azure Managed Identity
-```pwsh
-az identity create --name <managed-identity-name> --resource-group <resource-group>
-```
-4. Assign the Managed Identity to the Azure Function App
-```pwsh
-az functionapp identity assign --name <function-app-name> --resource-group <resource-group> --identities <managed-identity-id>
-```
-5. Assign the Managed Identity to the Azure Storage Account
-```pwsh
-az role assignment create --role "Storage Blob Data Contributor" --assignee <managed-identity-id> --scope /subscriptions/<subscription-id>/resourceGroups/<resource-group>/providers/Microsoft.Storage/storageAccounts/<storage-account-name>
-```
-6. Deploy this project to the Azure Function App
-```pwsh
-func azure functionapp publish <function-app-name>
-```
+Update the input variables in [Setup.ps1](Setup.ps1) to your needs, and run [Setup.ps1](Setup.ps1). This will:
 
-```pwsh
-az functionapp create --resource-group <resource-group> --name <function-app-name> --consumption-plan-location <location> --runtime dotnet --functions-version 4
-az storage account create --name <storage-account-name> --resource-group <resource-group> --location <location> --sku Standard_LRS
-az identity create --name <managed-identity-name> --resource-group <resource-group>
-az functionapp identity assign --name <function-app-name> --resource-group <resource-group> --identities <managed-identity-id>
-az role assignment create --role "Storage Blob Data Contributor" --assignee <managed-identity-id> --scope /subscriptions/<subscription-id>/resourceGroups/<resource-group>/providers/Microsoft.Storage/storageAccounts/<storage-account-name>
-func azure functionapp publish <function-app-name>
-```
+1. Create a Resource Group
+2. Create a Storage Account
+3. Assign permissions for current user
+4. Create blob containers
+5. Create a Function App
+6. Create a System Assigned Managed Idenity
+7. Create User Assigned Managed Identity
+8. Update settings locally
+9. Update settings in deployed Function App
+10. Publishing the Function App
 
 ## Usage
 
-1. Test the Functions in the Azure Portal
-2. Or run locally using the Azure Functions Core Tools
+1. Run locally using the 'Azure Functions Core Tools' and 'Azurite storage emulator'.
+2. Or test the Functions in the Azure Portal (after deploying using [Setup.ps1](Setup.ps1))
+
+## Links
+
+- [Use managed identities on a virtual machine to acquire access token - Managed identities for Azure resources | Microsoft Learn](https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/how-to-use-vm-token)
