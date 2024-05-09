@@ -1,24 +1,26 @@
 # Azure ManagedIdentity demo using a Azure Functions
 
+Let yourself be amazed by the shear wonders of __Managed Identities__ in Azure.
+
 This is a simple demo to show how to use Azure ManagedIdentity in an Azure Function to access an Azure Storage Account.
 
 It will show the use of:
 
-- DefaultAzureCredential
-- ManagedIdentityCredential (for system-assigned and user-assigned MI)
-- ChainedTokenCredential
-- AzureCliCredential
+- [DefaultAzureCredential](https://learn.microsoft.com/en-us/dotnet/api/azure.identity.defaultazurecredential?view=azure-dotnet)
+- [ManagedIdentityCredential](https://learn.microsoft.com/en-us/dotnet/api/azure.identity.managedidentitycredential?view=azure-dotnet) (for system-assigned and user-assigned MI)
+- [ChainedTokenCredential](https://learn.microsoft.com/en-us/dotnet/api/azure.identity.chainedtokencredential?view=azure-dotnet)
+- [AzureCliCredential](https://learn.microsoft.com/en-us/dotnet/api/azure.identity.azureclicredential?view=azure-dotnet)
 
 ## Solution design
 
-![docs\Solution-design.drawio.png](docs\Solution-design.drawio.png)
+![Solution-design.drawio.png](docs/Solution-design.drawio.png)
 
 ## Prerequisites
 
-- Azure Subscription
-- Azure CLI installed
-- Azure Functions Core Tools installed
-- Azurite storage emulator installed
+- Access to an Azure Subscription
+- Azure CLI installed (Solution is developed/tested with v2.59)
+- Azure Functions Core Tools installed (for runing local in VS-Code)
+- Azurite storage emulator installed (for runing local in VS-Code)
 
 ## Setup
 
