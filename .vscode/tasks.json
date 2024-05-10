@@ -61,7 +61,7 @@
 			"options": {
 				"cwd": "${workspaceFolder}/bin/Debug/net8.0"
 			},
-			"command": "host start",
+			"command": "host start --csharp",
 			"isBackground": true,
 			"problemMatcher": "$func-dotnet-watch"
 		}

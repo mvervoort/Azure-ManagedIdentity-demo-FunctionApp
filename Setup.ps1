@@ -3,11 +3,11 @@ Set-Location $PSScriptRoot
 Clear-Host
 
 # Input variables
-$resourceGroup = "MI-demo-rg"
+$resourceGroup = "MI-demo1-rg"
 $location = "northeurope"
-$functionAppName = "mvrs-mi-demo2-func"
-$storageAccountName = "mvrsmidemo2sa"
-$managedIdentityName = "mvrs-mi-demo2-umi"
+$functionAppName = "mvrs-mi-demo1-func"
+$storageAccountName = "mvrsmidemo1sa"
+$managedIdentityName = "mvrs-mi-demo1-umi"
 
 
 Write-Host "Creating resource group..."
@@ -39,14 +39,15 @@ $umi = az identity create --name $managedIdentityName --resource-group $resource
 az functionapp identity assign --name $functionAppName --resource-group $resourceGroup --identities $umi.id --output none
 az role assignment create --role "Storage Blob Data Contributor" --assignee $umi.principalId --scope $sa.id --output none
 
-Write-HOst "Update settings local..."
-$localSettings = Get-Content 'local.settings.json' -raw | ConvertFrom-Json
+Write-Host "Update settings local..."
+$defaultLocalSettings = @{IsEncrypted = $false; Values = @{AzureWebJobsStorage = "UseDevelopmentStorage=true"; FUNCTIONS_WORKER_RUNTIME = "dotnet-isolated" } }
+$localSettings = (Test-Path 'local.settings.json') ? ((Get-Content 'local.settings.json' -raw) | ConvertFrom-Json) : $defaultLocalSettings
 $localSettings.Values.MI_test_storage_account_name = $sa.name
 $localSettings.Values.MI_test_user_assigned_identity_id = $umi.clientId
-$localSettings | ConvertTo-Json -depth 32| set-content 'local.settings.json'
+$localSettings | ConvertTo-Json -depth 32 | set-content 'local.settings.json'
 
-Write-HOst "Update settings in function app..."
+Write-Host "Update settings in function app..."
 az functionapp config appsettings set --resource-group $resourceGroup --name $functionAppName --settings MI_test_storage_account_name=$($sa.name) MI_test_user_assigned_identity_id=$($umi.clientId) --output none
 
-Write-HOst "Publishing function app..."
+Write-Host "Publishing function app..."
 func azure functionapp publish $functionAppName
