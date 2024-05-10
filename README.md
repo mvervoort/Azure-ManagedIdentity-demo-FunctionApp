@@ -42,6 +42,29 @@ Update the input variables in [Setup.ps1](Setup.ps1) to your needs, and run [Set
 1. Run locally using the 'Azure Functions Core Tools' and 'Azurite storage emulator'.
 2. Or test the Functions in the Azure Portal (after deploying using [Setup.ps1](Setup.ps1))
 
+## Result
+
+Below is a table of all the results of local development (in Function simulator)
+and Function App (Test/Run of the Function in the Function App).
+
+| Credentials | Local development | Function App |
+| ----------- | ----------------- | ------------ |
+| DefaultAzureCredential | Token details:<br>- app_displayname = **Microsoft Azure CLI**<br>- appid = &lt;guid&gt;<br>- name = **Marco Vervoort**<br>- oid = &lt;guid&gt;<br>- unique_name = &lt;e-mail address&gt; | Token details:<br>- app_displayname = **mvrs-mi-demo2-func**<br>- appid = &lt;guid&gt;<br>- oid = &lt;guid&gt; |
+| System Assigned<br>ManagedIdentityCredential | <span style="color:red">Token details failed:<br>ManagedIdentityCredential authentication unavailable.<br>Multiple attempts failed to obtain a token from the managed identity endpoint.</span> | Token details:<br>- app_displayname = **mvrs-mi-demo2-func**<br>- appid = &lt;guid&gt;<br>- oid = &lt;guid&gt; |
+| User Assigned<br>ManagedIdentityCredential | <span style="color:red">Token details failed:<br>ManagedIdentityCredential authentication unavailable.<br>Multiple attempts failed to obtain a token from the managed identity endpoint.<span> | Token details:<br>- app_displayname = **mvrs-mi-demo2-umi**<br>- appid = &lt;guid&gt;<br>- oid = &lt;guid&gt; |
+| ChainedTokenCredential<br>(ManagedIdentityCredential + <br>AzureCliCredential) | Token details:<br>- app_displayname = **Microsoft Azure CLI**<br>- appid = &lt;guid&gt;<br>- name = **Marco Vervoort**<br>- oid = &lt;guid&gt;<br>- unique_name = &lt;e-mail address&gt; | Token details:<br>- app_displayname = **mvrs-mi-demo2-func**<br>- appid = &lt;guid&gt;<br>- oid = &lt;guid&gt; |
+
+And all of the succesful calls will also show the fetched containers, like:
+```
+Fetched containers:
+- azure-webjobs-hosts
+- azure-webjobs-secrets
+- container1
+- container2
+- container3
+- container4
+```
+
 ## Links
 
 - [Use managed identities on a virtual machine to acquire access token - Managed identities for Azure resources | Microsoft Learn](https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/how-to-use-vm-token)

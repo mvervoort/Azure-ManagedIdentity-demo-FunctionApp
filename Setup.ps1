@@ -3,11 +3,11 @@ Set-Location $PSScriptRoot
 Clear-Host
 
 # Input variables
-$resourceGroup = "MI-demo1-rg"
+$resourceGroup = "MI-demo2-rg"
 $location = "northeurope"
-$functionAppName = "mvrs-mi-demo1-func"
-$storageAccountName = "mvrsmidemo1sa"
-$managedIdentityName = "mvrs-mi-demo1-umi"
+$functionAppName = "mvrs-mi-demo2-func"
+$storageAccountName = "mvrsmidemo2sa"
+$managedIdentityName = "mvrs-mi-demo2-umi"
 
 
 Write-Host "Creating resource group..."
@@ -28,7 +28,7 @@ foreach ($count in 1..4) {
 }
 
 Write-Host "Creating function app..."
-az functionapp create --resource-group $resourceGroup --name $functionAppName --consumption-plan-location $location --storage-account $sa.name --runtime dotnet --functions-version 4 --disable-app-insights true --output none
+az functionapp create --resource-group $resourceGroup --name $functionAppName --consumption-plan-location $location --storage-account $sa.name --runtime dotnet-isolated --runtime-version 8 --functions-version 4 --disable-app-insights true --os-type Linux --output none
 
 Write-Host "Creating System Assigned Managed Idenity..."
 $smi = az functionapp identity assign --name $functionAppName --resource-group $resourceGroup | ConvertFrom-Json
@@ -46,8 +46,8 @@ $localSettings.Values.MI_test_storage_account_name = $sa.name
 $localSettings.Values.MI_test_user_assigned_identity_id = $umi.clientId
 $localSettings | ConvertTo-Json -depth 32 | set-content 'local.settings.json'
 
-Write-Host "Update settings in function app..."
-az functionapp config appsettings set --resource-group $resourceGroup --name $functionAppName --settings MI_test_storage_account_name=$($sa.name) MI_test_user_assigned_identity_id=$($umi.clientId) --output none
-
 Write-Host "Publishing function app..."
 func azure functionapp publish $functionAppName
+
+Write-Host "Update settings in function app..."
+az functionapp config appsettings set --resource-group $resourceGroup --name $functionAppName --settings MI_test_storage_account_name="$storageAccountName" MI_test_user_assigned_identity_id="$($umi.clientId)" --output none
