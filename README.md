@@ -15,6 +15,14 @@ It will show the use of:
 
 ![Solution-design.drawio.png](docs/Solution-design.drawio.png)
 
+This solutuin will setup a **Function App** running a few demo's about Managed Identity,
+and a **Storage Account** to whitch the Function App conntect to fetch the list of containers,
+just to demonstrate the usage of Managed Identities.  
+The Functtion App will have a fixed **System Assigned Managed Identity**
+and attached a **User Assigned Managed Identity**.
+Next, all Managed Identities, as also the developer (you),
+will be assigned **Storage Blob Data Contributor** role on the storage account in order to access the Storage Account's data.
+
 ## Prerequisites
 
 - Access to an Azure Subscription
@@ -24,27 +32,17 @@ It will show the use of:
 
 ## Setup
 
-Update the input variables in [Setup.ps1](Setup.ps1) to your needs, and run [Setup.ps1](Setup.ps1). This will:
-
-1. Create a Resource Group
-2. Create a Storage Account
-3. Assign permissions for current user
-4. Create blob containers
-5. Create a Function App
-6. Create a System Assigned Managed Idenity
-7. Create User Assigned Managed Identity
-8. Update settings locally
-9. Update settings in deployed Function App
-10. Publishing the Function App
+1. Update the input variables in [Setup.ps1](Setup.ps1) to your needs
+2. Run [Setup.ps1](Setup.ps1). This will create the full solution. You can also run each block manually.
 
 ## Usage
 
-1. Run locally using the 'Azure Functions Core Tools' and 'Azurite storage emulator'.
+1. Run/develop locally using the 'Azure Functions Core Tools' and 'Azurite storage emulator'.
 2. Or test the Functions in the Azure Portal (after deploying using [Setup.ps1](Setup.ps1))
 
 ## Result
 
-Below is a table of all the results of local development (in Function simulator)
+Below is a table of all the results of local development (in Function emulator)
 and Function App (Test/Run of the Function in the Function App).
 
 | Credentials | Local development | Function App |
